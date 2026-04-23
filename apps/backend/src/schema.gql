@@ -1,0 +1,150 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  author: String!
+  coverUrl: String
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  isAvailable: Boolean!
+  isbn: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input CreateBookInput {
+  author: String!
+  coverUrl: String
+  description: String
+  isbn: String!
+  title: String!
+}
+
+input CreateReservationInput {
+  bookId: ID!
+  dueDate: String!
+  reservationDate: String!
+  userId: ID!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  """Create a new book"""
+  createBook(input: CreateBookInput!): Book!
+
+  """Create a new reservation"""
+  createReservation(input: CreateReservationInput!): Reservation!
+
+  """Create a new library user"""
+  createUser(input: CreateUserInput!): User!
+
+  """Delete a book"""
+  deleteBook(id: ID!): Book!
+
+  """Delete a user"""
+  deleteUser(id: ID!): User!
+
+  """Return a reserved book"""
+  returnBook(reservationId: ID!): Reservation!
+
+  """Update an existing book"""
+  updateBook(input: UpdateBookInput!): Book!
+
+  """Update an existing user"""
+  updateUser(input: UpdateUserInput!): User!
+}
+
+type PaginatedReservations {
+  hasNextPage: Boolean!
+  items: [Reservation!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type Query {
+  """Get all available books (no active reservation)"""
+  availableBooks: [Book!]!
+
+  """Get a book by ID"""
+  book(id: ID!): Book!
+
+  """Get all books"""
+  books: [Book!]!
+
+  """Get a reservation by ID"""
+  reservation(id: ID!): Reservation!
+
+  """Get all reservations ordered by most recent"""
+  reservations(limit: Int = 20, page: Int = 1): PaginatedReservations!
+
+  """Get reservations for a specific book with optional date filter"""
+  reservationsByBook(bookId: ID!, fromDate: String, limit: Int = 20, page: Int = 1, toDate: String): PaginatedReservations!
+
+  """Get reservations for a specific user with optional date filter"""
+  reservationsByUser(fromDate: String, limit: Int = 20, page: Int = 1, toDate: String, userId: ID!): PaginatedReservations!
+
+  """Get a user by ID"""
+  user(id: ID!): User!
+
+  """Get all users"""
+  users: [User!]!
+}
+
+type Reservation {
+  book: Book
+  bookId: ID!
+  createdAt: DateTime!
+  dueDate: DateTime!
+  id: ID!
+  reservationDate: DateTime!
+  returnDate: DateTime
+  status: ReservationStatus!
+  updatedAt: DateTime!
+  user: User
+  userId: ID!
+}
+
+"""Current status of a reservation"""
+enum ReservationStatus {
+  """Reservation is active — book is out"""
+  ACTIVE
+
+  """Book has been returned"""
+  RETURNED
+}
+
+input UpdateBookInput {
+  author: String
+  coverUrl: String
+  description: String
+  id: ID!
+  isbn: String
+  title: String
+}
+
+input UpdateUserInput {
+  email: String
+  id: ID!
+  name: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}

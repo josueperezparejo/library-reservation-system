@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([email])
+  @@map("users")
+}
+
+model Book {
+  id           String        @id @default(cuid())
+  title        String
+  author       String
+  isbn         String        @unique
+  description  String?
+  coverUrl     String?
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([title])
+  @@index([author])
+  @@map("books")
+}
+
+model Reservation {
+  id              String            @id @default(cuid())
+  userId          String
+  bookId          String
+  reservationDate DateTime
+  dueDate         DateTime
+  returnDate      DateTime?
+  status          ReservationStatus @default(ACTIVE)
+  user            User              @relation(fields: [userId], references: [id])
+  book            Book              @relation(fields: [bookId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([bookId])
+  @@index([status])
+  @@index([reservationDate])
+  @@map("reservations")
+}
+
+enum ReservationStatus {
+  ACTIVE
+  RETURNED
+}
