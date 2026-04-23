@@ -14,3 +14,8 @@ export const apolloClient = new ApolloClient({
     query: { fetchPolicy: "network-only" },
   },
 });
+
+// Helper para obtener la URL del GraphQL
+export function getGraphQLUrl(): string {
+  return process.env.NEXT_PUBLIC_GRAPHQL_URL || "http://localhost:4000/graphql";
+}
