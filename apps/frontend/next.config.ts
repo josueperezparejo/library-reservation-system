@@ -1,12 +1,10 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: "export",
   images: {
     unoptimized: true,
-    remotePatterns: [
-      { protocol: 'https', hostname: 'covers.openlibrary.org' },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "covers.openlibrary.org" }],
   },
 };
 
